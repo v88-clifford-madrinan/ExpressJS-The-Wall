@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign In | The Wall</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="/assets/js/login.js"></script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <h1>Welcome to "The Wall"</h1>
+            <p>Sign in to you account</p>
+
+            <form action="/login" id="login_form" method="POST">
+                <p class="message"></p>
+                
+                <div>
+                    <label for="email">
+                        Email Address:
+                        <input type="email" id="email" name="email_address" placeholder="Enter your email" value="clifford@example.com">
+                    </label>
+                    <!-- ERROR MESSAGE WILL BE HERE LATER -->
+                    <p class="email"></p>
+                </div>
+                
+                <div>
+                    <label for="password">
+                        Password:
+                        <input type="password" id="password" name="password" placeholder="Enter your password" value="@dmin_123">
+                    </label>
+                    <!-- ERROR MESSAGE WILL BE HERE LATER -->
+                    <p class="password"></p>
+                </div>
+
+                <input type="submit" value="Sign in">
+                <a href="/register">Don't have an account?</a>
+            </form>
+        </div>
+    </body>
+</html>

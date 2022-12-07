@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign Up | The Wall</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="/assets/js/register.js"></script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <h1>Welcome to "The Wall"</h1>
+            <p>Create your own account</p>
+            
+            <form action="/register" id="registration_form" method="POST">
+                <!-- FIRST NAME -->
+                <div>
+                    <label for="first_name">
+                        First Name:
+                        <input type="text" id="first_name" name="first_name" placeholder="Enter your first name">
+                    </label>
+                    <!-- ERROR MESSAGE WILL BE HERE LATER -->
+                    <p class="first_name"></p>
+                </div>
+                
+                <!-- LAST NAME -->
+                <div>
+                    <label for="last_name">
+                        Last Name:
+                        <input type="text" id="last_name" name="last_name" placeholder="Enter your last name">
+                    </label>
+                    <!-- ERROR MESSAGE WILL BE HERE LATER -->
+                    <p class="last_name"></p>
+                </div>
+                
+                <!-- EMAIL ADDRESS -->
+                <div>
+                    <label for="email">
+                        Email Address:
+                        <input type="email" id="email" name="email_address" placeholder="Enter your email address">
+                    </label>
+                    <!-- ERROR MESSAGE WILL BE HERE LATER -->
+                    <p class="email"></p>
+                </div>
+                
+                <!-- PASSWORD -->
+                <div>
+                    <label for="password">
+                        Password:
+                        <input type="password" id="password" name="password" placeholder="Enter your password">
+                    </label>
+                    <!-- ERROR MESSAGE WILL BE HERE LATER -->
+                    <p class="password"></p>
+                </div>
+                
+                <!-- PASSWORD -->
+                <div>
+                    <label for="confirm_password">
+                        Confirm Password:
+                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter your password">
+                    </label>
+                    <!-- ERROR MESSAGE WILL BE HERE LATER -->
+                    <p class="confirm_password"></p>
+                </div>
+
+                <input type="submit" value="Register">
+                <a href="/login">Already have an account?</a>
+            </form>
+        </div>
+    </body>
+</html>
