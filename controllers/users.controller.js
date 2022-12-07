@@ -30,6 +30,11 @@ class UsersController {
         
         this.#res.send(JSON.stringify(response_data));
     }
+
+    logout = async () => {
+        this.#req.session.user_id = null;
+        this.#res.redirect("/login");
+    }
 }
 
 module.exports = UsersController;
