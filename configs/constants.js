@@ -6,7 +6,7 @@ constant.DATABASE = {
     host: "localhost",
     user: "root",
     password: "",
-    database: "wall",
+    database: "the_wall_record",
     connectionLimit: 50,
     port: "3306"
 }
