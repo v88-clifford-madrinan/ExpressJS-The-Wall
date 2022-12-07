@@ -1,23 +1,22 @@
-$(document).ready( () => {
+$(document).ready(() => {
     $("#login_form").on("submit", function(){
         let form = $(this);
 
         $.post(form.attr("action"), $(form).serialize(), (data) => {
-            window.location = "/wall"
-        }, "json");
+            console.log(data);
 
-        return false;
-    });
-
-    $("#registration_form").on("submit", function(){
-        let form = $(this);
-
-        $.post(form.attr("action"), $(form).serialize(), (data) => {
-            if(data.status){
-                location.reload();
+            if (data.succeed) {
+                window.location = "/";
             }
-            else{
-                alert(data.error);
+            else {
+                if (data.message) $("p.message").text(data.message);
+                else $("p.message").text("");
+
+                if(data.errors.email) $("p.email").text(data.errors.email);
+                else $("p.email").text("");
+
+                if(data.errors.password) $("p.password").text(data.errors.password);
+                else $("p.password").text("");
             }
         }, "json");
 

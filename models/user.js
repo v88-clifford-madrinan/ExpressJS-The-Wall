@@ -50,6 +50,47 @@ class User {
 
         return response;
     }
+
+    async validLoginInput(form_data, session) {
+        const regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        let response = {
+            errors: {},
+            succeed: false
+        };
+
+        if(form_data["email_address"] == "") {
+            response.errors.email = "*Email field is required!";
+        }
+        else if(!regex.test(form_data["email_address"])){
+            response.errors.email = "*Invalid email address!";
+        }
+        if(form_data["password"] == "") {
+            response.errors.password = "*Password field is required!";
+        }
+
+        if (Object.keys(response.errors).length === 0) {
+            const query = `SELECT * FROM users WHERE email = '${form_data["email_address"]}'`;
+            let result = await DBconnection.executeQuery(query);
+
+            if (result.result.length > 0) {
+                /* SUCCEED WILL HOLD TRUE IF INPUTTED PASSWORD MATCHES THE PASSWORD IN THE DATABASE */
+                if (bcrypt.compareSync(form_data["password"], result.result[0].password)) {
+                    session.user_id = result.result[0].id;
+                    response.succeed = true;
+                }
+                else {
+                    response.message = "Incorrect password!";
+                    response.succeed = false;
+                }
+            }
+            else {
+                response.message = "Account doesn't exists!";
+                response.succeed = false;
+            }
+        }
+        
+        return response;
+    }
 }
 
 module.exports = User;
