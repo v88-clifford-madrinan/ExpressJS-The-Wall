@@ -1,3 +1,6 @@
+const { response } = require("express");
+const Messages = require("../models/messages");
+
 class MessagesController {
     #res;
     #req;
@@ -14,6 +17,13 @@ class MessagesController {
         else {
             this.#res.redirect("/login");
         }
+    }
+
+    create = async () => {
+        const messages = new Messages();
+        const response_data = await messages.createMessage(this.#req.body, this.#req.session);
+        
+        this.#res.send(JSON.stringify(response_data));
     }
 }
 

@@ -6,12 +6,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Home | The Wall</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-        <script src="/assets/js/register.js"></script>
+        <script src="/assets/js/messages.js"></script>
     </head>
     <body>
         <div id="wrapper">
             <h1>Home</h1>
             <a href="/logout">Sign out</a>
+
+            <form action="/messages" method="POST" class="messages">
+                <p class="response"></p>
+                <p>Write something:</p>
+                <textarea name="message" id="message" cols="35" rows="5" placeholder="What's on your mind?"></textarea>
+                <input type="submit">
+            </form>
         </div>
     </body>
 </html>

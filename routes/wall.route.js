@@ -14,5 +14,6 @@ WallRoute.get("/logout", (req, res) => { new UsersController(req, res).logout();
 
 /* ROUTE FOR MESSAGES */
 WallRoute.get("/", (req, res) => { new MessagesController(req, res).index(); });
+WallRoute.post("/messages", (req, res) => { new MessagesController(req, res).create(); });
 
 module.exports = WallRoute;
