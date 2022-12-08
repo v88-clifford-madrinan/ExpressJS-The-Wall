@@ -10,7 +10,6 @@ class CommentsController {
     }
 
     create = async () => {
-        // console.log(this.#req.body);
         const comment = new Comment();
         await comment.createComment(this.#req.body, this.#req.session);
 

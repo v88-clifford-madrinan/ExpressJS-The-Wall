@@ -73,6 +73,9 @@ $(document).ready(() => {
                         .find("p.message_content")
                         .html(message.message)
                         .end()
+                        .find("div.comment_container")
+                        .attr("id", "comment_message_" + message.id)
+                        .end()
                         .find("input[type=hidden]")
                         .attr("value", message.id)
                         .end()
@@ -90,7 +93,30 @@ $(document).ready(() => {
                         .find("p.message_content")
                         .html(message.message)
                         .end()
+                        .find("div.comment_container")
+                        .attr("id", "comment_message_" + message.id)
+                        .end()
                         .appendTo("div.message_container");
+                }
+                
+                $("div.comment_container#comment_message_" + message.id).children().not(":first").remove();
+
+                for(let j = 0; j < message.comments.length; j++){
+                    const comment = message.comments[j];
+
+                    console.log(message.comments.length);
+                    $("#comment_message_" + message.id + " div.comment_template:first").clone()
+                        .css("display", "block")
+                        .find("h4.author")
+                        .html(comment.first_name + " " + comment.last_name)
+                        .end()
+                        .find("p.comment_date")
+                        .html(timeSince(Date.parse(comment.created_at)))
+                        .end()
+                        .find("p.comment_content")
+                        .html(comment.comment)
+                        .end()
+                        .appendTo("div.comment_container#comment_message_" + message.id);
                 }
             }
         }, "json");

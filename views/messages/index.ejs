@@ -39,17 +39,19 @@
                     </div>
 
                     <div class="comment_container" style="margin-left: 30px;">
-                        <div class="comment_template">
-    
+                        <div class="comment_template" style="display: none;">
+                            <h4 class="author" style="display: inline;">John Doe</h4>
+                            <p class="comment_date" style="color: grey; margin-top: 0px;">8 minutes ago</p>
+                            <p class="comment_content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, sint?</p>
                         </div>
-    
-                        <form action="/comments" method="POST">
-                            <h5>Write a comment to this message:</h5>
-                            <input type="hidden" name="message_id">
-                            <textarea name="comment" id="comment" cols="35" rows="5" placeholder="Write a comment to this message"></textarea>
-                            <input type="submit">
-                        </form>
                     </div>
+    
+                    <form action="/comments" method="POST" style="margin-left: 30px;">
+                        <h5>Write a comment to this message:</h5>
+                        <input type="hidden" name="message_id">
+                        <textarea name="comment" id="comment" cols="35" rows="5" placeholder="Write a comment to this message"></textarea>
+                        <input type="submit">
+                    </form>
                 </div>
             </div>
         </div>

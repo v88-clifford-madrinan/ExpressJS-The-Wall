@@ -1,3 +1,4 @@
+const { response } = require("express");
 const DBconnection = require("./connection");
 
 class Messages {
@@ -31,7 +32,7 @@ class Messages {
             data: [],
             user_id:  session.user_id
         }
-        const query = `SELECT 
+        let query = `SELECT 
             users.first_name AS first_name, 
             users.last_name AS last_name, 
             messages.id AS id,
@@ -40,6 +41,22 @@ class Messages {
             messages.created_at AS created_at
             FROM messages INNER JOIN users ON messages.user_id = users.id ORDER BY messages.id DESC;`
         response_data.data = await DBconnection.executeQuery(query);
+
+        for(let i = 0; i < response_data.data.result.length; i++){
+            const message = response_data.data.result[i];
+            query = `SELECT
+                users.first_name AS first_name, 
+                users.last_name AS last_name,
+                comments.id AS id,comments.user_id AS user_id,
+                comments.comment AS comment,
+                comments.created_at AS created_at
+                FROM comments INNER JOIN users ON comments.user_id = users.id WHERE comments.message_id = ${message.id} ORDER BY id DESC LIMIT 5`;
+            
+            const comments = await DBconnection.executeQuery(query);
+
+            response_data.data.result[i].comments = comments.result;
+        }
+        
 
         return response_data;
     }
