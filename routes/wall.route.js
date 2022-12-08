@@ -16,5 +16,6 @@ WallRoute.get("/logout", (req, res) => { new UsersController(req, res).logout();
 WallRoute.get("/", (req, res) => { new MessagesController(req, res).index(); });
 WallRoute.post("/messages", (req, res) => { new MessagesController(req, res).create(); });
 WallRoute.get("/get-messages", (req, res) => { new MessagesController(req, res).getMessages(); });
+WallRoute.post("/messages/delete", (req, res) => { new MessagesController(req, res).destroy(); })
 
 module.exports = WallRoute;

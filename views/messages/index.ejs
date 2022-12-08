@@ -27,22 +27,28 @@
             <div class="message_container" style="margin-left: 30px;">
                 <div class="message_template" style="display: none;">
                     <div>
-                        <h3 class="author">John Doe</h3>
+                        <h3 class="author" style="display: inline;">John Doe</h3>
+
+                        <form action="/messages/delete" method="POST" style="display: inline;">
+                            <input type="hidden" name="message_id">
+                            <input type="submit" value="Delete this message">
+                        </form>
+
                         <p class="message_date" style="color: grey; margin-top: 0px;">8 minutes ago</p>
                         <p class="message_content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, sint?</p>
                     </div>
-                </div>
 
-                <div class="comment_container" style="margin-left: 30px;">
-                    <div class="comment_template">
-
+                    <div class="comment_container" style="margin-left: 30px;">
+                        <div class="comment_template">
+    
+                        </div>
+    
+                        <form action="/comments" method="POST">
+                            <h5>Write a comment to this message:</h5>
+                            <textarea name="comment" id="comment" cols="35" rows="5" placeholder="Write a comment to this message"></textarea>
+                            <input type="submit">
+                        </form>
                     </div>
-
-                    <form action="/comments" method="POST">
-                        <h5>Write a comment to this message:</h5>
-                        <textarea name="comment" id="comment" cols="35" rows="5" placeholder="Write a comment to this message"></textarea>
-                        <input type="submit">
-                    </form>
                 </div>
             </div>
         </div>

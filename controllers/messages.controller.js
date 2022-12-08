@@ -28,9 +28,16 @@ class MessagesController {
 
     getMessages = async () => {
         const messages = new Messages();
-        const response_data = await messages.getMessages();
+        const response_data = await messages.getMessages(this.#req.session);
         
         this.#res.send(JSON.stringify(response_data));
+    }
+
+    destroy = async () => {
+        const messages = new Messages();
+        await messages.deleteMessage(this.#req.body);
+
+        this.#res.redirect("/");
     }
 }
 

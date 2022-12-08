@@ -26,18 +26,28 @@ class Messages {
         return response;
     }
 
-    async getMessages(){
+    async getMessages(session){
+        const response_data = {
+            data: [],
+            user_id:  session.user_id
+        }
         const query = `SELECT 
-            users.id AS user_id,
             users.first_name AS first_name, 
             users.last_name AS last_name, 
             messages.id AS id,
+            messages.user_id AS user_id,
             messages.message AS message,
             messages.created_at AS created_at
             FROM messages INNER JOIN users ON messages.user_id = users.id ORDER BY messages.id DESC;`
-        const response_data = await DBconnection.executeQuery(query);
+        response_data.data = await DBconnection.executeQuery(query);
 
         return response_data;
+    }
+    async deleteMessage(form_data){
+        console.log(form_data);
+
+        const query = `DELETE FROM messages WHERE id = ${form_data.message_id}`;
+        await DBconnection.executeQuery(query);
     }
 }
 

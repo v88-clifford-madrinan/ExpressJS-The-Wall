@@ -58,21 +58,40 @@ $(document).ready(() => {
 
         $.get(form.attr("action"), (data) => {
             console.log(data);
-            for(let i = 0; i < data.result.length; i++){
-                const message = data.result[i];
+            for(let i = 0; i < data.data.result.length; i++){
+                const message = data.data.result[i];
 
-                $("div.message_template:first").clone()
-                    .css("display", "block")
-                    .find("h3.author")
-                    .html(message.first_name + " " + message.last_name)
-                    .end()
-                    .find("p.message_date")
-                    .html(timeSince(Date.parse(message.created_at)))
-                    .end()
-                    .find("p.message_content")
-                    .html(message.message)
-                    .end()
-                    .appendTo("div.message_container");
+                if(data.user_id == message.user_id){
+                    $("div.message_template:first").clone()
+                        .css("display", "block")
+                        .find("h3.author")
+                        .html(message.first_name + " " + message.last_name)
+                        .end()
+                        .find("p.message_date")
+                        .html(timeSince(Date.parse(message.created_at)))
+                        .end()
+                        .find("p.message_content")
+                        .html(message.message)
+                        .end()
+                        .find("input[type=hidden]")
+                        .attr("value", message.id)
+                        .end()
+                        .appendTo("div.message_container");
+                }
+                else {
+                    $("div.message_template:first").clone()
+                        .css("display", "block")
+                        .find("h3.author")
+                        .html(message.first_name + " " + message.last_name)
+                        .end()
+                        .find("p.message_date")
+                        .html(timeSince(Date.parse(message.created_at)))
+                        .end()
+                        .find("p.message_content")
+                        .html(message.message)
+                        .end()
+                        .appendTo("div.message_container");
+                }
             }
         }, "json");
 
