@@ -25,6 +25,13 @@ class MessagesController {
         
         this.#res.send(JSON.stringify(response_data));
     }
+
+    getMessages = async () => {
+        const messages = new Messages();
+        const response_data = await messages.getMessages();
+        
+        this.#res.send(JSON.stringify(response_data));
+    }
 }
 
 module.exports = MessagesController;

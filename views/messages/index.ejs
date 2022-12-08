@@ -13,12 +13,38 @@
             <h1>Home</h1>
             <a href="/logout">Sign out</a>
 
+            <form action="/get-messages" class="get_message" style="display: none;">
+                <input type="submit">
+            </form>
+
             <form action="/messages" method="POST" class="messages">
                 <p class="response"></p>
-                <p>Write something:</p>
+                <h2>Write something:</h2>
                 <textarea name="message" id="message" cols="35" rows="5" placeholder="What's on your mind?"></textarea>
                 <input type="submit">
             </form>
+
+            <div class="message_container" style="margin-left: 30px;">
+                <div class="message_template" style="display: none;">
+                    <div>
+                        <h3 class="author">John Doe</h3>
+                        <p class="message_date" style="color: grey; margin-top: 0px;">8 minutes ago</p>
+                        <p class="message_content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, sint?</p>
+                    </div>
+                </div>
+
+                <div class="comment_container" style="margin-left: 30px;">
+                    <div class="comment_template">
+
+                    </div>
+
+                    <form action="/comments" method="POST">
+                        <h5>Write a comment to this message:</h5>
+                        <textarea name="comment" id="comment" cols="35" rows="5" placeholder="Write a comment to this message"></textarea>
+                        <input type="submit">
+                    </form>
+                </div>
+            </div>
         </div>
     </body>
 </html>

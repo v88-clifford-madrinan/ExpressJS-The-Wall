@@ -25,6 +25,20 @@ class Messages {
 
         return response;
     }
+
+    async getMessages(){
+        const query = `SELECT 
+            users.id AS user_id,
+            users.first_name AS first_name, 
+            users.last_name AS last_name, 
+            messages.id AS id,
+            messages.message AS message,
+            messages.created_at AS created_at
+            FROM messages INNER JOIN users ON messages.user_id = users.id ORDER BY messages.id DESC;`
+        const response_data = await DBconnection.executeQuery(query);
+
+        return response_data;
+    }
 }
 
 module.exports = Messages;
