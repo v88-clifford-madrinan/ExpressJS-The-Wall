@@ -1,5 +1,4 @@
-const { response } = require("express");
-const Messages = require("../models/messages");
+const Message = require("../models/message");
 
 class MessagesController {
     #res;
@@ -20,22 +19,22 @@ class MessagesController {
     }
 
     create = async () => {
-        const messages = new Messages();
-        const response_data = await messages.createMessage(this.#req.body, this.#req.session);
+        const message = new Message();
+        const response_data = await message.createMessage(this.#req.body, this.#req.session);
         
         this.#res.send(JSON.stringify(response_data));
     }
 
     getMessages = async () => {
-        const messages = new Messages();
-        const response_data = await messages.getMessages(this.#req.session);
+        const message = new Message();
+        const response_data = await message.getMessages(this.#req.session);
         
         this.#res.send(JSON.stringify(response_data));
     }
 
     destroy = async () => {
-        const messages = new Messages();
-        await messages.deleteMessage(this.#req.body);
+        const message = new Message();
+        await message.deleteMessage(this.#req.body);
 
         this.#res.redirect("/");
     }

@@ -1,7 +1,7 @@
 const { Router }     = require("express");
 const UsersController = require("../controllers/users.controller");
 const MessagesController = require("../controllers/messages.controller");
-
+const CommentsController = require("../controllers/comments.controller");
 
 const WallRoute = Router();
 
@@ -17,5 +17,8 @@ WallRoute.get("/", (req, res) => { new MessagesController(req, res).index(); });
 WallRoute.post("/messages", (req, res) => { new MessagesController(req, res).create(); });
 WallRoute.get("/get-messages", (req, res) => { new MessagesController(req, res).getMessages(); });
 WallRoute.post("/messages/delete", (req, res) => { new MessagesController(req, res).destroy(); })
+
+/* ROUTE FOR COMMENTS */
+WallRoute.post("/comments", (req, res) => { new CommentsController(req, res).create(); });
 
 module.exports = WallRoute;
