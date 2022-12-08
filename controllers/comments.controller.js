@@ -15,6 +15,13 @@ class CommentsController {
 
         this.#res.redirect("/");
     }
+
+    destroy = async () => {
+        const comment = new Comment();
+        await comment.deleteComment(this.#req.body);
+        
+        this.#res.redirect("/");
+    }
 }
 
 module.exports = CommentsController;

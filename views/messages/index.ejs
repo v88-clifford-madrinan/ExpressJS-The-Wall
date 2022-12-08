@@ -31,7 +31,7 @@
 
                         <form action="/messages/delete" method="POST" style="display: inline;">
                             <input type="hidden" name="message_id">
-                            <input type="submit" value="Delete this message">
+                            <input type="submit" value="Delete this message" class="btn_message_delete">
                         </form>
 
                         <p class="message_date" style="color: grey; margin-top: 0px;">8 minutes ago</p>
@@ -41,6 +41,12 @@
                     <div class="comment_container" style="margin-left: 30px;">
                         <div class="comment_template" style="display: none;">
                             <h4 class="author" style="display: inline;">John Doe</h4>
+
+                            <form action="/comment/delete" method="POST" style="display: inline;">
+                                <input type="hidden" name="comment_id">
+                                <input type="submit" value="Delete this comment" class="btn_comment_delete">
+                            </form>
+
                             <p class="comment_date" style="color: grey; margin-top: 0px;">8 minutes ago</p>
                             <p class="comment_content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, sint?</p>
                         </div>
