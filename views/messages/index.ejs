@@ -65,7 +65,7 @@
     
                     <form action="/comments" method="POST" style="margin-left: 30px;">
                         <h5>Write a comment to this message:</h5>
-                        <input type="hidden" name="message_id">
+                        <input type="hidden" name="message_id" value="<%= messages[i].id %>">
                         <textarea name="comment" id="comment" cols="35" rows="5" placeholder="Write a comment to this message"></textarea>
                         <input type="submit">
                     </form>
