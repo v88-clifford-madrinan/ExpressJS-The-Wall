@@ -55,8 +55,18 @@ class MessagesController {
     }
 
     destroy = async () => {
+        let response_data = { status: false, result: {}, errors: null }
         const message = new Message();
-        await message.deleteMessage(this.#req.body);
+
+        try{
+            response_data = await message.deleteMessage(this.#req.body);
+            
+            this.#req.session.errors = response_data.errors;
+            this.#req.session.message = response_data.message;
+        }
+        catch(error){
+            response_data.errors = error;
+        }
 
         this.#res.redirect("/");
     }

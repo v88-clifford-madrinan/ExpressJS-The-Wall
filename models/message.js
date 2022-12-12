@@ -1,6 +1,7 @@
 const { checkFields } = require("../helpers/index.helper");
 const DBconnection = require("./connection");
 const mysql = require("mysql");
+const e = require("express");
 
 class Messages {
     async createMessage(form_data, session){
@@ -22,7 +23,6 @@ class Messages {
                 response_data.status = response_data.errors == "";
 
                 if(response_data.status){
-                    console.log("FUCK");
                     let query = "INSERT INTO messages (user_id, message, created_at) VALUES (?, ?, NOW())";
                     let params = [
                         session.user_id,
@@ -44,7 +44,7 @@ class Messages {
         return response_data;
     }
 
-    async getMessages(session){
+    async getMessages(){
         let response_data = {
             status: false,
             result: {},
@@ -75,10 +75,36 @@ class Messages {
         return response_data;
     }
     async deleteMessage(form_data){
-        console.log(form_data);
+        let response_data = {
+            status: false,
+            result: {},
+            errors: null,
+            message: ""
+        }
 
-        const query = `DELETE FROM messages WHERE id = ${form_data.message_id}`;
-        await DBconnection.executeQuery(query);
+        try{
+            let check_fields = checkFields([ "message_id" ], form_data);
+
+            if(check_fields.status){
+                let query = mysql.format("DELETE FROM messages WHERE id = ?", [ check_fields.result.message_id ]);
+                let delete_message = await DBconnection.executeQuery(query);
+
+                if(delete_message.status && delete_message.result.affectedRows){
+                    response_data.status = true;
+                }
+                else {
+                    response_data.errors = "Something went wrong while deleting message!";
+                }
+            }
+            else {
+                response_data = check_fields;
+            }
+        }
+        catch(error){
+            response_data.errors = error;
+        }
+
+        return response_data;
     }
 }
 
