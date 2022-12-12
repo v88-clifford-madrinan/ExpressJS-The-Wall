@@ -2,62 +2,82 @@ const { checkFields } = require("../helpers/index.helper");
 const DBconnection = require("./connection");
 const bcrypt = require("bcryptjs");
 const mysql = require("mysql");
+const { response } = require("express");
 
 class User {
-    async createUser(form_data){const regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    async createUser(form_data, session){
+        const regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         let response_data = {
             status: false,
             result: {},
-            errors: null
+            errors: {}
         }
 
-        /*------------------------ VALIDATING FIRST NAME ------------------------*/
-        if(form_data["first_name"] == ""){
-            response_data.errors.first_name = "*First name field is required!";
-        }
-        else if(form_data["first_name"].length < 2){
-            response_data.errors.first_name = "*First name must be at least 2 characters long!";
-        }
+        try{
+            let check_fields = checkFields([ "first_name", "last_name", "email_address", "password", "confirm_password" ], form_data);
 
-        /*------------------------ VALIDATING LAST NAME ------------------------*/
-        if(form_data["last_name"] == ""){
-            response_data.errors.last_name = "*Last name field is required!";
-        }
-        else if(form_data["last_name"].length < 2){
-            response_data.errors.last_name = "*Last name must be at least 2 characters long!";
-        }
+            if(check_fields.status){
+                /*------------------------ VALIDATING FIRST NAME ------------------------*/
+                if(check_fields.result.first_name == ""){
+                    response_data.errors.first_name = "*First name field is required!";
+                }
+                else if(check_fields.result.first_name.length < 2){
+                    response_data.errors.first_name = "*First name must be at least 2 characters long!";
+                }
+        
+                /*------------------------ VALIDATING LAST NAME ------------------------*/
+                if(check_fields.result.last_name == ""){
+                    response_data.errors.last_name = "*Last name field is required!";
+                }
+                else if(check_fields.result.last_name.length < 2){
+                    response_data.errors.last_name = "*Last name must be at least 2 characters long!";
+                }
+        
+                /*------------------------ VALIDATING EMAIL ADDRESS ------------------------*/
+                if(check_fields.result.email_address == ""){
+                    response_data.errors.email = "*Email field is required!";
+                }
+                else if(!regex.test(check_fields.result.email_address)){
+                    response_data.errors.email = "*Invalid email address!";
+                }
+        
+                /*------------------------ VALIDATING PASSWORD ------------------------*/
+                if(check_fields.result.password == ""){
+                    response_data.errors.password = "*Password field is required!";
+                }
+                else if(check_fields.result.password.length < 6){
+                    response_data.errors.password = "*Password must be at least 6 characters long!";
+                }
+        
+                /*------------------------ VALIDATING CONFIRM PASSWORD ------------------------*/
+                if(check_fields.result.confirm_password == ""){
+                    response_data.errors.confirm_password = "*Confirm password field is required!";
+                }
+                else if(check_fields.result.confirm_password != check_fields.result.password){
+                    response_data.errors.confirm_password = "*Password doesn't match!";
+                }
+                
+                /* STATUS WILL HOLD FALSE IF THERE IS NO ERROR MESSAGE GIVEN */
+                response_data.status = Object.keys(response_data.errors).length === 0;
 
-        /*------------------------ VALIDATING EMAIL ADDRESS ------------------------*/
-        if(form_data["email_address"] == ""){
-            response_data.errors.email = "*Email field is required!";
+                if(response_data.status){
+                    /* SAVE THE DATA */
+                    let params = [
+                        check_fields.result.first_name,
+                        check_fields.result.last_name,
+                        check_fields.result.email_address,
+                        bcrypt.hashSync(check_fields.result.password)
+                    ];
+                    let query = "INSERT INTO users (first_name, last_name, email, password, created_at) VALUES (?, ?, ?, ?, NOW())";
+                    response_data = await DBconnection.executeQuery(mysql.format(query, params));
+                }
+            }
+            else {
+                response_data = check_fields;
+            }
         }
-        else if(!regex.test(form_data["email_address"])){
-            response_data.errors.email = "*Invalid email address!";
-        }
-
-        /*------------------------ VALIDATING PASSWORD ------------------------*/
-        if(form_data["password"] == ""){
-            response_data.errors.password = "*Password field is required!";
-        }
-        else if(form_data["password"].length < 6){
-            response_data.errors.password = "*Password must be at least 6 characters long!";
-        }
-
-        /*------------------------ VALIDATING CONFIRM PASSWORD ------------------------*/
-        if(form_data["confirm_password"] == ""){
-            response_data.errors.confirm_password = "*Confirm password field is required!";
-        }
-        else if(form_data["confirm_password"] != form_data["password"]){
-            response_data.errors.confirm_password = "*Password doesn't match!";
-        }
-
-        /* STATUS WILL HOLD FALSE IF THERE IS NO ERROR MESSAGE GIVEN */
-        response_data.status = Object.keys(response_data.errors).length === 0;
-
-        if(response_data.status){
-            /* SAVE THE DATA */
-            const query = `INSERT INTO users (first_name, last_name, email, password, created_at) VALUES ('${form_data["first_name"]}', '${form_data["last_name"]}', '${form_data["email_address"]}', '${bcrypt.hashSync(form_data["password"])}', NOW())`;
-            await DBconnection.executeQuery(query);
+        catch(error){
+            response.errors = error
         }
 
         return response_data;
@@ -74,14 +94,9 @@ class User {
         };
 
         try{
-            // console.log(form_data);
             let check_fields = checkFields([ "email_address", "password" ], form_data);
 
             if(check_fields.status){
-                // console.log(check_fields.result);
-                // console.log(`'${check_fields.result.email_address}'`);
-                // console.log(`'${check_fields.result.password}'`);
-
                 /*------------------------ VALIDATING EMAIL ADDRESS ------------------------*/
                 if(check_fields.result.email_address == "") {
                     response_data.errors.email = "*Email field is required!";
