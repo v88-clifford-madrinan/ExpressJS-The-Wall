@@ -1,3 +1,4 @@
+const { response } = require("express");
 const Message = require("../models/message");
 
 class MessagesController {
@@ -7,15 +8,28 @@ class MessagesController {
     constructor(req, res){
         this.#req = req;
         this.#res = res;
+
+        if(this.#req.session.user_id == null || typeof this.#req.session.user_id === "undefined"){
+            this.#res.redirect("/login");
+        }
     }
 
     index = async () => {
-        if(this.#req.session.user_id){
-            this.#res.render("messages/index.ejs");
+        let response_data = { status: false, result: {}, errors: null }
+        const message = new Message();
+
+        try{
+            response_data = await message.getMessages(this.#req.session);
+            
+            this.#req.session.errors = response_data.errors;
+            this.#req.session.message = response_data.message;
+            console.log(response_data.result);
         }
-        else {
-            this.#res.redirect("/login");
+        catch(error){
+            response.errors = error;
         }
+
+        this.#res.render("messages/index.ejs", { messages: response_data.result, user_id: this.#req.session.user_id });
     }
 
     create = async () => {

@@ -1,5 +1,5 @@
-const { response } = require("express");
 const DBconnection = require("./connection");
+const mysql = require("mysql");
 
 class Messages {
     async createMessage(form_data, session){
@@ -28,35 +28,32 @@ class Messages {
     }
 
     async getMessages(session){
-        const response_data = {
-            data: [],
-            user_id:  session.user_id
+        let response_data = {
+            status: false,
+            result: {},
+            errors: {}
         }
-        let query = `SELECT 
-            users.first_name AS first_name, 
-            users.last_name AS last_name, 
-            messages.id AS id,
-            messages.user_id AS user_id,
-            messages.message AS message,
-            messages.created_at AS created_at
-            FROM messages INNER JOIN users ON messages.user_id = users.id ORDER BY messages.id DESC;`
-        response_data.data = await DBconnection.executeQuery(query);
 
-        for(let i = 0; i < response_data.data.result.length; i++){
-            const message = response_data.data.result[i];
-            query = `SELECT
-                users.first_name AS first_name, 
-                users.last_name AS last_name,
-                comments.id AS id,comments.user_id AS user_id,
-                comments.comment AS comment,
-                comments.created_at AS created_at
-                FROM comments INNER JOIN users ON comments.user_id = users.id WHERE comments.message_id = ${message.id} ORDER BY id DESC LIMIT 5`;
-            
-            const comments = await DBconnection.executeQuery(query);
+        try{
+            let query = `SELECT 
+                messages.id, messages.user_id, messages.message, DATE_FORMAT(messages.created_at, "%M %D %Y") AS created_at,
+                CONCAT(users.first_name, " ", users.last_name) AS posted_by,
+                (
+                    SELECT 
+                        JSON_OBJECTAGG(comments.id, JSON_ARRAY(comments.user_id, comments.comment, CONCAT(users.first_name, " ", users.last_name),  DATE_FORMAT(comments.created_at, "%M %D %Y")))
+                    FROM comments
+                    INNER JOIN users ON users.id = comments.user_id
+                    WHERE comments.message_id = messages.id
+                ) AS comments
+                FROM messages
+                INNER JOIN users ON users.id = messages.user_id
+                ORDER BY messages.id DESC`
 
-            response_data.data.result[i].comments = comments.result;
+            response_data = await DBconnection.executeQuery(mysql.format(query,));
         }
-        
+        catch(error){
+            response_data.errors = error
+        }
 
         return response_data;
     }

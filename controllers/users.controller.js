@@ -1,5 +1,4 @@
 const { response } = require("express");
-const session = require("express-session");
 const User = require("../models/user");
 
 class UsersController {

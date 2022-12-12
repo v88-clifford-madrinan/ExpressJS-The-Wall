@@ -25,31 +25,41 @@
             </form>
 
             <div class="message_container" style="margin-left: 30px;">
-                <div class="message_template" style="display: none;">
-                    <div>
-                        <h3 class="author" style="display: inline;">John Doe</h3>
 
+<% if(locals.messages){ %>
+    <% for(let i = 0; i < messages.length; i++){ %>
+        <% let comments = (messages[i].comments) ? JSON.parse(messages[i].comments) : [] %>
+                <div class="message_template">
+                    <div>
+                        <h3 class="author" style="display: inline;"><%= messages[i].posted_by %></h3>
+
+        <% if(user_id == messages[i].user_id){ %>
                         <form action="/messages/delete" method="POST" style="display: inline;">
                             <input type="hidden" name="message_id">
                             <input type="submit" value="Delete this message" class="btn_message_delete">
                         </form>
-
-                        <p class="message_date" style="color: grey; margin-top: 0px;">8 minutes ago</p>
-                        <p class="message_content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, sint?</p>
+        <% } %>
+                        <p class="message_date" style="color: grey; margin-top: 0px;"><%= messages[i].created_at %></p>
+                        <p class="message_content"><%= messages[i].message %></p>
                     </div>
 
                     <div class="comment_container" style="margin-left: 30px;">
-                        <div class="comment_template" style="display: none;">
-                            <h4 class="author" style="display: inline;">John Doe</h4>
 
+        <% for(id in comments){ %>
+                        <div class="comment_template">
+                            <h4 class="author" style="display: inline;"><%= comments[id][2] %></h4>
+            
+            <% if(user_id == comments[id][0]){ %>
                             <form action="/comment/delete" method="POST" style="display: inline;">
                                 <input type="hidden" name="comment_id">
                                 <input type="submit" value="Delete this comment" class="btn_comment_delete">
                             </form>
+            <% } %>
 
-                            <p class="comment_date" style="color: grey; margin-top: 0px;">8 minutes ago</p>
-                            <p class="comment_content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, sint?</p>
+                            <p class="comment_date" style="color: grey; margin-top: 0px;"><%= comments[id][3] %></p>
+                            <p class="comment_content"><%= comments[id][1] %></p>
                         </div>
+        <% } %>
                     </div>
     
                     <form action="/comments" method="POST" style="margin-left: 30px;">
@@ -59,6 +69,8 @@
                         <input type="submit">
                     </form>
                 </div>
+    <% } %>
+<% } %>
             </div>
         </div>
     </body>

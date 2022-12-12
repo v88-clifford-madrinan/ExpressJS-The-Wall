@@ -157,5 +157,5 @@ $(document).ready(() => {
         return false;
     })
 
-    $("form.get_message").submit();
+    // $("form.get_message").submit();
 });
