@@ -38,15 +38,16 @@ $(document).ready(() => {
         $.post(form.attr("action"), $(form).serialize(), (data) => {
             console.log(data);
 
-            if(data.succeed){
-                $("p.response").text(data.message);
-                $("form.messages textarea").val("");
+            location.reload();
+            // if(data.status){
+            //     $("p.response").text(data.message);
+            //     $("form.messages textarea").val("");
 
-                $("form.get_message").submit();
-            }
-            else{
-                $("p.response").text(data.errors);
-            }
+            //     $("form.get_message").submit();
+            // }
+            // else{
+            //     $("p.response").text(data.errors);
+            // }
         }, "json");
         return false;
     });

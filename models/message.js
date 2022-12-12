@@ -1,30 +1,47 @@
+const { checkFields } = require("../helpers/index.helper");
 const DBconnection = require("./connection");
 const mysql = require("mysql");
 
 class Messages {
     async createMessage(form_data, session){
-        const response = {
+        let response_data = {
+            status: false,
+            result: {},
             errors: "",
-            message: "",
-            succeed: false
-        }
-        console.log(form_data);
-        console.log(session.user_id);
-
-        if(form_data["message"] == ""){
-            response.errors = "Message cannot be empty!";
+            message: ""
         }
 
-        response.succeed = response.errors == ""
+        try{
+            let check_fields = checkFields([ "message" ], form_data);
 
-        if(response.succeed){
-            response.message = "Your message is successfully created!";
-            const query = `INSERT INTO messages (user_id, message, created_at) VALUES ('${session.user_id}', '${form_data["message"]}', NOW())`;
-            
-            await DBconnection.executeQuery(query);
+            if(check_fields.status){
+                if(check_fields.result.message == ""){
+                    response_data.errors = "Message cannot be empty!";
+                }
+                
+                response_data.status = response_data.errors == "";
+
+                if(response_data.status){
+                    console.log("FUCK");
+                    let query = "INSERT INTO messages (user_id, message, created_at) VALUES (?, ?, NOW())";
+                    let params = [
+                        session.user_id,
+                        check_fields.result.message
+                    ];
+                    
+                    response_data = await DBconnection.executeQuery(mysql.format(query, params));
+                    response_data.message = "Your message is successfully created!";
+                }
+            }
+            else {
+                response_data = check_fields;
+            }
+        }
+        catch(error){
+            response_data.errors = error;
         }
 
-        return response;
+        return response_data;
     }
 
     async getMessages(session){

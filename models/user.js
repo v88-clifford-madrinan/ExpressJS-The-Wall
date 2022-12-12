@@ -2,7 +2,6 @@ const { checkFields } = require("../helpers/index.helper");
 const DBconnection = require("./connection");
 const bcrypt = require("bcryptjs");
 const mysql = require("mysql");
-const { response } = require("express");
 
 class User {
     async createUser(form_data, session){
@@ -62,13 +61,13 @@ class User {
 
                 if(response_data.status){
                     /* SAVE THE DATA */
+                    let query = "INSERT INTO users (first_name, last_name, email, password, created_at) VALUES (?, ?, ?, ?, NOW())";
                     let params = [
                         check_fields.result.first_name,
                         check_fields.result.last_name,
                         check_fields.result.email_address,
                         bcrypt.hashSync(check_fields.result.password)
                     ];
-                    let query = "INSERT INTO users (first_name, last_name, email, password, created_at) VALUES (?, ?, ?, ?, NOW())";
                     response_data = await DBconnection.executeQuery(mysql.format(query, params));
                 }
             }
@@ -77,7 +76,7 @@ class User {
             }
         }
         catch(error){
-            response.errors = error
+            response_data.errors = error
         }
 
         return response_data;
