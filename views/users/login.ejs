@@ -14,15 +14,18 @@
             <p>Sign in to you account</p>
 
             <form action="/login" id="login_form" method="POST">
-                <p class="message"></p>
-                
+<% if(locals.message){ %>
+                <p class="message"><%= locals.message %></p>
+<% } %>
                 <div>
                     <label for="email">
                         Email Address:
                         <input type="email" id="email" name="email_address" placeholder="Enter your email" value="clifford@example.com">
                     </label>
                     <!-- ERROR MESSAGE WILL BE HERE LATER -->
-                    <p class="email"></p>
+<% if(locals.errors && locals.errors.email){ %>
+                    <p class="email"><%= locals.errors.email %></p>
+<% } %>
                 </div>
                 
                 <div>
@@ -31,7 +34,9 @@
                         <input type="password" id="password" name="password" placeholder="Enter your password" value="@dmin_123">
                     </label>
                     <!-- ERROR MESSAGE WILL BE HERE LATER -->
-                    <p class="password"></p>
+<% if(locals.errors && locals.errors.password){ %>
+                    <p class="password"><%= locals.errors.password %></p>
+<% } %>
                 </div>
 
                 <input type="submit" value="Sign in">

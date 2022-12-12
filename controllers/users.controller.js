@@ -1,3 +1,4 @@
+const session = require("express-session");
 const User = require("../models/user");
 
 class UsersController {
@@ -10,7 +11,13 @@ class UsersController {
     }
 
     index = async () => {
-        this.#res.render("users/login.ejs");
+        let errors = this.#req.session.errors;
+        let message = this.#req.session.message;
+
+        this.#req.session.errors = null;
+        this.#req.session.message = null;
+
+        this.#res.render("users/login.ejs", { errors, message });
     }
 
     new = async () => {
@@ -26,8 +33,10 @@ class UsersController {
 
     login = async () => {
         const user = new User();
-        const response_data = await user.validLoginInput(this.#req.body, this.#req.session);
-        
+        let response_data = await user.validLoginInput(this.#req.body, this.#req.session);
+
+        this.#req.session.errors = response_data.errors;
+        this.#req.session.message = response_data.message;
         this.#res.send(JSON.stringify(response_data));
     }
 

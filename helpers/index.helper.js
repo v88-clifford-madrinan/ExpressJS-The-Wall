@@ -1,26 +1,31 @@
 const Helper = {};
 
 Helper.checkFields = (required_fields, req_body) => {
-    let response_data = { status: true, result: {}, error: null };
+    let response_data = { status: true, result: {}, error: null, message: "" };
 
     try{
         let sanitized_data = {};
-        let missing_fields = [];
+        let prohibited_fields = [];
 
+        /* SANITIZING DATA */
         for(let index in required_fields){
             let selected_key = required_fields[index];
 
-            if(req_body[selected_key] != undefined && req_body[selected_key] !== ""){
-                sanitized_data[selected_key] = req_body[selected_key];
-            }
-            else{
-                missing_fields.push(selected_key);
+            /* ASSIGN THE VALUE FROM SUBMITTED DATA TO SANITIZED DATA */
+            sanitized_data[selected_key] = req_body[selected_key];
+        }
+
+        /* GETTING PROHIBITED FIELDS/NOT ALLOWED */
+        for(field in req_body){
+            if(!required_fields.includes(field)){
+                prohibited_fields.push(field);
             }
         }
 
-        if(missing_fields.length){
-            response_data.result = { missing_fields };
-            response_data.error  = "There are missing/blank fields."
+        if(prohibited_fields.length){
+            response_data.status = false;
+            response_data.result = { prohibited_fields };
+            response_data.message  = "There are fields that is not allowed."
         }
         else{
             response_data.status = true;
