@@ -1,4 +1,3 @@
-const { response } = require("express");
 const Message = require("../models/message");
 
 class MessagesController {

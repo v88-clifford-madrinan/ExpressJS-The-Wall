@@ -80,7 +80,6 @@ class User {
         }
 
         return response_data;
-        //TODO RETURN HERE AFTER LOGIN...
     }
 
     async validLoginInput(form_data, session) {

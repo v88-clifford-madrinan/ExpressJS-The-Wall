@@ -48,17 +48,17 @@
 
         <% for(id in comments){ %>
                         <div class="comment_template">
-                            <h4 class="author" style="display: inline;"><%= comments[id][2] %></h4>
+                            <h4 class="author" style="display: inline;"><%= comments[id][3] %></h4>
             
-            <% if(user_id == comments[id][0]){ %>
+            <% if(user_id == comments[id][1]){ %>
                             <form action="/comment/delete" method="POST" style="display: inline;">
-                                <input type="hidden" name="comment_id">
+                                <input type="hidden" name="comment_id" value="<%= comments[id][0] %>">
                                 <input type="submit" value="Delete this comment" class="btn_comment_delete">
                             </form>
             <% } %>
 
-                            <p class="comment_date" style="color: grey; margin-top: 0px;"><%= comments[id][3] %></p>
-                            <p class="comment_content"><%= comments[id][1] %></p>
+                            <p class="comment_date" style="color: grey; margin-top: 0px;"><%= comments[id][4] %></p>
+                            <p class="comment_content"><%= comments[id][2] %></p>
                         </div>
         <% } %>
                     </div>

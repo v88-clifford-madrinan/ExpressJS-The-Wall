@@ -20,7 +20,6 @@ class CommentsController {
         try{
             response_data = await comment.createComment(this.#req.body, this.#req.session);
             
-            console.log(response_data);
             this.#req.session.errors = response_data.errors;
             this.#req.session.message = response_data.message;
         }
@@ -32,8 +31,18 @@ class CommentsController {
     }
 
     destroy = async () => {
+        let response_data = { status: false, result: {}, errors: null }
         const comment = new Comment();
-        await comment.deleteComment(this.#req.body);
+
+        try{
+            response_data = await comment.deleteComment(this.#req.body);
+            
+            this.#req.session.errors = response_data.errors;
+            this.#req.session.message = response_data.message;
+        }
+        catch(errors){
+            response_data.errors = error;
+        }
         
         this.#res.redirect("/");
     }

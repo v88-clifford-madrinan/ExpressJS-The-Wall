@@ -14,7 +14,6 @@ class Comment {
         try{
             let check_fields = checkFields([ "message_id", "comment" ], form_data);
 
-            console.log(check_fields);
             if(check_fields.status){
                 if(check_fields.result.comment == ""){
                     response_data.errors = "Comment cannot be empty!";
@@ -46,8 +45,33 @@ class Comment {
     }
 
     async deleteComment(form_data){
-        const query = `DELETE FROM comments WHERE id = ${form_data.comment_id}`;
-        await DBconnection.executeQuery(query);
+        let response_data = {
+            status: false,
+            result: {},
+            errors: null,
+            message: ""
+        }
+
+        try{
+            let check_fields = checkFields([ "comment_id" ], form_data);
+
+            if(check_fields.status){
+                let query = mysql.format("DELETE FROM comments WHERE id = ?", [ check_fields.result.comment_id ]);
+                let delete_comment = await DBconnection.executeQuery(query);
+                
+                if(delete_comment.status && delete_comment.result.affectedRows){
+                    response_data.status = true;
+                }
+                else {
+                    response_data.errors = "Something went wrong while deleting message!";
+                }
+            }
+        }
+        catch(errors){
+            response_data.errors = error;
+        }
+
+        return response_data;
     }
 }
 

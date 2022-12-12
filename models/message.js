@@ -1,7 +1,6 @@
 const { checkFields } = require("../helpers/index.helper");
 const DBconnection = require("./connection");
 const mysql = require("mysql");
-const e = require("express");
 
 class Messages {
     async createMessage(form_data, session){
@@ -57,7 +56,7 @@ class Messages {
                 CONCAT(users.first_name, " ", users.last_name) AS posted_by,
                 (
                     SELECT 
-                        JSON_OBJECTAGG(comments.id, JSON_ARRAY(comments.user_id, comments.comment, CONCAT(users.first_name, " ", users.last_name),  DATE_FORMAT(comments.created_at, "%M %D %Y")))
+                        JSON_OBJECTAGG(comments.id, JSON_ARRAY(comments.id, comments.user_id, comments.comment, CONCAT(users.first_name, " ", users.last_name),  DATE_FORMAT(comments.created_at, "%M %D %Y")))
                     FROM comments
                     INNER JOIN users ON users.id = comments.user_id
                     WHERE comments.message_id = messages.id
