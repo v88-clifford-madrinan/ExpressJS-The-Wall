@@ -13,52 +13,65 @@
             <h1>Home</h1>
             <a href="/logout">Sign out</a>
 
-            <form action="/get-messages" class="get_message" style="display: none;">
-                <input type="submit">
-            </form>
-
             <form action="/messages" method="POST" class="messages">
-                <p class="response"></p>
+
+<% if(locals._message){%>
+                <p><%= locals._message %></p>
+<% }else if(locals.errors){ %>
+                <p><%= locals.errors %></p>
+<% } %>
                 <h2>Write something:</h2>
                 <textarea name="message" id="message" cols="35" rows="5" placeholder="What's on your mind?"></textarea>
                 <input type="submit">
             </form>
 
             <div class="message_container" style="margin-left: 30px;">
-                <div class="message_template" style="display: none;">
-                    <div>
-                        <h3 class="author" style="display: inline;">John Doe</h3>
 
-                        <form action="/messages/delete" method="POST" style="display: inline;">
-                            <input type="hidden" name="message_id">
+<% if(locals.messages){ %>
+    <% for(let i = 0; i < messages.length; i++){ %>
+        <% let comments = (messages[i].comments) ? JSON.parse(messages[i].comments) : [] %>
+                <div class="message_template">
+                    <div>
+                        <h3 class="author" style="display: inline;"><%= messages[i].posted_by %></h3>
+
+        <% if(user_id == messages[i].user_id){ %>
+                        <form action="/messages/delete" method="POST" style="display: inline;" class="delete_message">
+                            <input type="hidden" name="message_id" value="<%= messages[i].id %>">
                             <input type="submit" value="Delete this message" class="btn_message_delete">
                         </form>
-
-                        <p class="message_date" style="color: grey; margin-top: 0px;">8 minutes ago</p>
-                        <p class="message_content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, sint?</p>
+        <% } %>
+                        <p class="message_date" style="color: grey; margin-top: 0px;"><%= messages[i].created_at %></p>
+                        <p class="message_content"><%= messages[i].message %></p>
                     </div>
 
                     <div class="comment_container" style="margin-left: 30px;">
-                        <div class="comment_template" style="display: none;">
-                            <h4 class="author" style="display: inline;">John Doe</h4>
 
+        <% for(id in comments){ %>
+                        <div class="comment_template">
+                            <h4 class="author" style="display: inline;"><%= comments[id][3] %></h4>
+            
+            <% if(user_id == comments[id][1]){ %>
                             <form action="/comment/delete" method="POST" style="display: inline;">
-                                <input type="hidden" name="comment_id">
+                                <input type="hidden" name="comment_id" value="<%= comments[id][0] %>">
                                 <input type="submit" value="Delete this comment" class="btn_comment_delete">
                             </form>
+            <% } %>
 
-                            <p class="comment_date" style="color: grey; margin-top: 0px;">8 minutes ago</p>
-                            <p class="comment_content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, sint?</p>
+                            <p class="comment_date" style="color: grey; margin-top: 0px;"><%= comments[id][4] %></p>
+                            <p class="comment_content"><%= comments[id][2] %></p>
                         </div>
+        <% } %>
                     </div>
     
                     <form action="/comments" method="POST" style="margin-left: 30px;">
                         <h5>Write a comment to this message:</h5>
-                        <input type="hidden" name="message_id">
+                        <input type="hidden" name="message_id" value="<%= messages[i].id %>">
                         <textarea name="comment" id="comment" cols="35" rows="5" placeholder="Write a comment to this message"></textarea>
                         <input type="submit">
                     </form>
                 </div>
+    <% } %>
+<% } %>
             </div>
         </div>
     </body>

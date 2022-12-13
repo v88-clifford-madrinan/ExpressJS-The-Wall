@@ -21,7 +21,9 @@
                         <input type="text" id="first_name" name="first_name" placeholder="Enter your first name">
                     </label>
                     <!-- ERROR MESSAGE WILL BE HERE LATER -->
-                    <p class="first_name"></p>
+<% if(locals.errors && locals.errors.first_name){ %>
+                    <p class="first_name"><%= locals.errors.first_name %></p>
+<% } %>
                 </div>
                 
                 <!-- LAST NAME -->
@@ -31,7 +33,9 @@
                         <input type="text" id="last_name" name="last_name" placeholder="Enter your last name">
                     </label>
                     <!-- ERROR MESSAGE WILL BE HERE LATER -->
-                    <p class="last_name"></p>
+<% if(locals.errors && locals.errors.last_name){ %>
+                    <p class="last_name"><%= locals.errors.last_name %></p>
+<% } %>
                 </div>
                 
                 <!-- EMAIL ADDRESS -->
@@ -41,7 +45,9 @@
                         <input type="email" id="email" name="email_address" placeholder="Enter your email address">
                     </label>
                     <!-- ERROR MESSAGE WILL BE HERE LATER -->
-                    <p class="email"></p>
+<% if(locals.errors && locals.errors.email){ %>
+                    <p class="email"><%= locals.errors.email %></p>
+<% } %>
                 </div>
                 
                 <!-- PASSWORD -->
@@ -51,7 +57,9 @@
                         <input type="password" id="password" name="password" placeholder="Enter your password">
                     </label>
                     <!-- ERROR MESSAGE WILL BE HERE LATER -->
-                    <p class="password"></p>
+<% if(locals.errors && locals.errors.password){ %>
+                    <p class="password"><%= locals.errors.password %></p>
+<% } %>
                 </div>
                 
                 <!-- PASSWORD -->
@@ -61,7 +69,9 @@
                         <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter your password">
                     </label>
                     <!-- ERROR MESSAGE WILL BE HERE LATER -->
-                    <p class="confirm_password"></p>
+<% if(locals.errors && locals.errors.confirm_password){ %>
+                    <p class="password"><%= locals.errors.confirm_password %></p>
+<% } %>
                 </div>
 
                 <input type="submit" value="Register">
