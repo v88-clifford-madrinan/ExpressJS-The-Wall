@@ -4,12 +4,7 @@ const mysql = require("mysql");
 
 class Comment {
     async createComment(form_data, session){
-        let response_data = {
-            status: false,
-            result: {},
-            errors: "",
-            message: ""
-        }
+        let response_data = { status: false, result: {}, errors: "", message: "" };
 
         try{
             let check_fields = checkFields([ "message_id", "comment" ], form_data);
@@ -45,12 +40,7 @@ class Comment {
     }
 
     async deleteComment(form_data){
-        let response_data = {
-            status: false,
-            result: {},
-            errors: null,
-            message: ""
-        }
+        let response_data = { status: false, result: {}, errors: null, message: "" };
 
         try{
             let check_fields = checkFields([ "comment_id" ], form_data);

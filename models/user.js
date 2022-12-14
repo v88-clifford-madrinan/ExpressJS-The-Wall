@@ -6,11 +6,7 @@ const mysql = require("mysql");
 class User {
     async createUser(form_data, session){
         const regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        let response_data = {
-            status: false,
-            result: {},
-            errors: {}
-        }
+        let response_data = { status: false, result: {}, errors: {} };
 
         try{
             let check_fields = checkFields([ "first_name", "last_name", "email_address", "password", "confirm_password" ], form_data);
@@ -84,12 +80,7 @@ class User {
 
     async validLoginInput(form_data, session) {
         const regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        let response_data = {
-            status: false,
-            result:{},
-            errors: {},
-            message: ""
-        };
+        let response_data = { status: false, result:{}, errors: {}, message: "" };
 
         try{
             let check_fields = checkFields([ "email_address", "password" ], form_data);

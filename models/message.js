@@ -4,12 +4,7 @@ const mysql = require("mysql");
 
 class Messages {
     async createMessage(form_data, session){
-        let response_data = {
-            status: false,
-            result: {},
-            errors: "",
-            message: ""
-        }
+        let response_data = { status: false, result: {}, errors: "", message: "" };
 
         try{
             let check_fields = checkFields([ "message" ], form_data);
@@ -44,27 +39,10 @@ class Messages {
     }
 
     async getMessages(){
-        let response_data = {
-            status: false,
-            result: {},
-            errors: {}
-        }
+        let response_data = { status: false, result: {}, errors: {} };
 
         try{
-            let query = `SELECT 
-                messages.id, messages.user_id, messages.message, DATE_FORMAT(messages.created_at, "%M %D %Y") AS created_at,
-                CONCAT(users.first_name, " ", users.last_name) AS posted_by,
-                (
-                    SELECT 
-                        JSON_OBJECTAGG(comments.id, JSON_ARRAY(comments.id, comments.user_id, comments.comment, CONCAT(users.first_name, " ", users.last_name),  DATE_FORMAT(comments.created_at, "%M %D %Y")))
-                    FROM comments
-                    INNER JOIN users ON users.id = comments.user_id
-                    WHERE comments.message_id = messages.id
-                ) AS comments
-                FROM messages
-                INNER JOIN users ON users.id = messages.user_id
-                ORDER BY messages.id DESC`
-
+            let query = `SELECT messages.id, messages.user_id, messages.message, DATE_FORMAT(messages.created_at, "%M %D %Y") AS created_at, CONCAT(users.first_name, " ", users.last_name) AS posted_by, (SELECT JSON_OBJECTAGG(comments.id, JSON_ARRAY(comments.id, comments.user_id, comments.comment, CONCAT(users.first_name, " ", users.last_name),  DATE_FORMAT(comments.created_at, "%M %D %Y"))) FROM comments INNER JOIN users ON users.id = comments.user_id WHERE comments.message_id = messages.id) AS comments FROM messages INNER JOIN users ON users.id = messages.user_id ORDER BY messages.id DESC`;
             response_data = await DBconnection.executeQuery(mysql.format(query,));
         }
         catch(error){
@@ -74,12 +52,7 @@ class Messages {
         return response_data;
     }
     async deleteMessage(form_data){
-        let response_data = {
-            status: false,
-            result: {},
-            errors: null,
-            message: ""
-        }
+        let response_data = { status: false, result: {}, errors: null, message: "" };
 
         try{
             let check_fields = checkFields([ "message_id" ], form_data);
