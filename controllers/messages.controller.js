@@ -50,7 +50,7 @@ class MessagesController {
             response_data.errors = error;
         }
         
-        this.#res.send(JSON.stringify(response_data));
+        this.#res.json(response_data);
     }
 
     destroy = async () => {
