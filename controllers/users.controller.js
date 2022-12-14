@@ -43,7 +43,7 @@ class UsersController {
             response_data.errors = error;
         }
 
-        this.#res.send(JSON.stringify(response_data));
+        this.#res.json(response_data);
     }
 
     login = async () => {
@@ -60,7 +60,7 @@ class UsersController {
             response.errors = error;
         }
 
-        this.#res.send(JSON.stringify(response_data));
+        this.#res.json(response_data);
     }
 
     logout = async () => {
