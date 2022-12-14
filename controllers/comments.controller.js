@@ -15,7 +15,7 @@ class CommentsController {
 
     create = async () => {
         let response_data = { status: false, result: {}, errors: null }
-        const comment = new Comment();
+        let comment = new Comment();
 
         try{
             response_data = await comment.createComment(this.#req.body, this.#req.session);
@@ -32,7 +32,7 @@ class CommentsController {
 
     destroy = async () => {
         let response_data = { status: false, result: {}, errors: null }
-        const comment = new Comment();
+        let comment = new Comment();
 
         try{
             response_data = await comment.deleteComment(this.#req.body);

@@ -18,7 +18,7 @@ class MessagesController {
         let user_id = this.#req.session.user_id;
         let _message = this.#req.session.message;
         let errors = this.#req.session.errors;
-        const message = new Message();
+        let message = new Message();
         let messages = [];
 
         this.#req.session.message = null;
@@ -38,7 +38,7 @@ class MessagesController {
 
     create = async () => {
         let response_data = { status: false, result: {}, errors: null }
-        const message = new Message();
+        let message = new Message();
 
         try{
             response_data = await message.createMessage(this.#req.body, this.#req.session);
@@ -55,7 +55,7 @@ class MessagesController {
 
     destroy = async () => {
         let response_data = { status: false, result: {}, errors: null }
-        const message = new Message();
+        let message = new Message();
 
         try{
             response_data = await message.deleteMessage(this.#req.body);

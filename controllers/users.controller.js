@@ -31,7 +31,7 @@ class UsersController {
 
     create = async () => {
         let response_data = { status: false, result: {}, errors: null }
-        const user = new User();
+        let user = new User();
 
         try{
             response_data = await user.createUser(this.#req.body, this.#req.session);
@@ -48,7 +48,7 @@ class UsersController {
 
     login = async () => {
         let response_data = { status: false, result: {}, errors: null }
-        const user = new User();
+        let user = new User();
 
         try{
             response_data = await user.validLoginInput(this.#req.body, this.#req.session);
